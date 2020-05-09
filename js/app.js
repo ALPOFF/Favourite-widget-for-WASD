@@ -1,22 +1,29 @@
 let app = (() => {
 	let start = function () {
-		$.get("https://wasd.tv/api/channels/211491", (data) => {
+		$.get("https://wasd.tv/api/channels/***", (data) => {
 			let arrL = data.result.channel_followers.length
-			console.log(data)
+			console.log(arrL)
 			setInterval(() => {
-				$.get("https://wasd.tv/api/channels/211491", (data) => {
+				$.get("https://wasd.tv/api/channels/***", (data) => {
+					console.log('get')
+
 
 					if (data.result.channel_followers.length <= arrL) {
 						$("h1").text("")
+						$("img").attr("src","");
 						arrL = data.result.channel_followers.length;
 					}
 					else {
-						$("h1").text("Спасибо за подписку! " + data.result.channel_followers[0].user_login);
+						let audio = new Audio(); 
+						audio.src = './audio/follow.mp3';
+						audio.autoplay = true;
+						$("h1").text("Спасибо за подписку," + data.result.channel_followers[0].user_login + "!");
 						arrL = data.result.channel_followers.length;
+						$("img").attr("src","./gif/source.gif");
 						console.log(arrL)
 					}
 				});
-			}, 5000);
+			}, 7000);
 		})
 	}
 	return {
