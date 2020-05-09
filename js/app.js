@@ -1,41 +1,28 @@
 let app = (() => {
-
-	let temp = ''
-
-	let start = function() {
-	 
-		
-		setInterval(getPrice, 5000);
-		//$("h1").text("");
-	}
- 
-	
-	let getPrice = () => {
+	let start = function () {
 		$.get("https://wasd.tv/api/channels/211491", (data) => {
-			console.log(data.result.channel_followers[0].user_login)
-			
-			console.log(temp)
-			if (data.result.channel_followers[0].user_login === temp) {
-				$("h1").text("")
-			}
-			else {
-				$("h1").text("Спасибо за подписку! " + data.result.channel_followers[0].user_login);
-				temp = data.result.channel_followers[0].user_login;
-			}
-		});
+			let arrL = data.result.channel_followers.length
+			console.log(data)
+			setInterval(() => {
+				$.get("https://wasd.tv/api/channels/211491", (data) => {
 
-		
+					if (data.result.channel_followers.length <= arrL) {
+						$("h1").text("")
+						arrL = data.result.channel_followers.length;
+					}
+					else {
+						$("h1").text("Спасибо за подписку! " + data.result.channel_followers[0].user_login);
+						arrL = data.result.channel_followers.length;
+						console.log(arrL)
+					}
+				});
+			}, 5000);
+		})
 	}
-
-	
-
 	return {
 		start: start
-	}		
+	}
 })();
-
 app.start();
-
- 
 
 
